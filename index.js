@@ -19,9 +19,10 @@ mongoose.connect(
 );
 
 app.post("/signup", async (req, res) => {
-  const { username, password } = req.body;
+  const { name, username, password } = req.body;
   try {
     const userDoc = await User.create({
+      name,
       username,
       password: bcrypt.hashSync(password, salt),
     });
@@ -41,6 +42,7 @@ app.post("/login", async (req, res) => {
     jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
       if (err) throw err;
       res.cookie("token", token).json({
+        name: userDoc.name,
         id: userDoc._id,
         username,
       });
