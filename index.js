@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const User = require("./models/User");
+const Score = require("./models/Score");
 const bcrypt = require("bcryptjs");
 const app = express();
 const jwt = require("jsonwebtoken");
@@ -62,6 +63,21 @@ app.get("/profile", (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
+});
+
+app.post("post-score", async (req, res) => {
+  const { username, date, score } = req.body;
+  try {
+    const scoreDoc = await Score.create({
+      username,
+      date,
+      score,
+    });
+    res.json(scoreDoc);
+  } catch (e) {
+    console.log(e);
+    res.status(400).json(e);
+  }
 });
 
 app.listen(4000);
