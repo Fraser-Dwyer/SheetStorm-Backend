@@ -66,9 +66,29 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/post-score", async (req, res) => {
-  const { username, weekStart, today, scoreObj } = req.body;
-  const query = { username: username }; // Change to week commencing
-  const updateDoc = { username, weekStart, scoreObj };
+  const { username, weekStart, score, todayDay } = req.body;
+  const query = {
+    username: username,
+    weekStart: weekStart,
+  };
+
+  var updateDoc;
+  if (todayDay === "Mon") {
+    updateDoc = { $set: { Mon: score } };
+  } else if (todayDay === "Tue") {
+    updateDoc = { $set: { Tue: score } };
+  } else if (todayDay === "Wed") {
+    updateDoc = { $set: { Wed: score } };
+  } else if (todayDay === "Thu") {
+    updateDoc = { $set: { Thu: score } };
+  } else if (todayDay === "Fri") {
+    updateDoc = { $set: { Fri: score } };
+  } else if (todayDay === "Sat") {
+    updateDoc = { $set: { Sat: score } };
+  } else {
+    updateDoc = { $set: { Sun: score } };
+  }
+
   const options = { upsert: true };
   try {
     const scoreDoc = await Score.updateOne(query, updateDoc, options);
