@@ -3,8 +3,16 @@ const { Schema, model } = mongoose;
 
 const ScoreSchema = new Schema({
   username: { type: String },
-  date: { type: String },
-  score: { type: Number },
+  weekStart: { type: String },
+  scoreObj: [
+    new Schema(
+      {
+        day: String,
+        sc: Number,
+      },
+      { _id: false }
+    ),
+  ],
 });
 
 const ScoreModel = model("Score", ScoreSchema);

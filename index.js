@@ -66,13 +66,12 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/post-score", async (req, res) => {
-  const { username, date, score } = req.body;
+  const { username, weekStart, today, scoreObj } = req.body;
+  const query = { username: username }; // Change to week commencing
+  const updateDoc = { username, weekStart, scoreObj };
+  const options = { upsert: true };
   try {
-    const scoreDoc = await Score.create({
-      username,
-      date,
-      score,
-    });
+    const scoreDoc = await Score.updateOne(query, updateDoc, options);
     res.json(scoreDoc);
   } catch (e) {
     console.log(e);
