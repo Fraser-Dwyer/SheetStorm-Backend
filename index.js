@@ -53,6 +53,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/get-scores", async (req, res) => {
+  const scores = await Score.find();
+  res.json(scores);
+});
+
 app.get("/profile", (req, res) => {
   const { token } = req.cookies;
   jwt.verify(token, secret, {}, (err, info) => {
