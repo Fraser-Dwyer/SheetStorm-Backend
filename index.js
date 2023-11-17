@@ -65,7 +65,7 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
 });
 
-app.post("post-score", async (req, res) => {
+app.post("/post-score", async (req, res) => {
   const { username, date, score } = req.body;
   try {
     const scoreDoc = await Score.create({

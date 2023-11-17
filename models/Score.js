@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const ScoreSchema = new Schema({
   username: { type: String },
-  date: { type: Date },
+  date: { type: String },
   score: { type: Number },
 });
 
