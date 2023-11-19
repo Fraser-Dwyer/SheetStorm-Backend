@@ -35,6 +35,27 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.post("/make-scores", async (req, res) => {
+  const { username, weekStart } = req.body;
+  try {
+    const scoreDoc = await Score.create({
+      username,
+      weekStart,
+      Mon: "-",
+      Tue: "-",
+      Wed: "-",
+      Thu: "-",
+      Fri: "-",
+      Sat: "-",
+      Sun: "-",
+    });
+    res.json(scoreDoc);
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json();
+  }
+});
+
 app.get("/check-user", async (req, res) => {
   const users = await User.find();
   res.json(users);
@@ -51,7 +72,7 @@ app.post("/login", async (req, res) => {
       res.cookie("token", token).json({
         name: userDoc.name,
         id: userDoc._id,
-        username,
+        username: userDoc.username,
       });
     });
   } else {
@@ -60,7 +81,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/get-scores", async (req, res) => {
-  const scores = await Score.findOne();
+  const scores = await Score.find();
   res.json(scores);
 });
 
