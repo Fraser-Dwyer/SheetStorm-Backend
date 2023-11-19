@@ -4,12 +4,13 @@ const mongoose = require("mongoose");
 const User = require("./models/User");
 const Score = require("./models/Score");
 const bcrypt = require("bcryptjs");
-const app = express();
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
 const salt = bcrypt.genSaltSync(10);
 const secret = "sdkjfbn239rdskb2398ds";
+
+const app = express();
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
@@ -30,8 +31,13 @@ app.post("/signup", async (req, res) => {
     res.json(userDoc);
   } catch (e) {
     console.log(e);
-    res.status(400).json(e);
+    return res.status(400).json({ err: "Error going on here" });
   }
+});
+
+app.get("/check-user", async (req, res) => {
+  const users = await User.find();
+  res.json(users);
 });
 
 app.post("/login", async (req, res) => {
@@ -54,7 +60,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/get-scores", async (req, res) => {
-  const scores = await Score.find();
+  const scores = await Score.findOne();
   res.json(scores);
 });
 
