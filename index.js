@@ -73,6 +73,11 @@ app.post("/make-scores", async (req, res) => {
   }
 });
 
+app.get("/check-lobby", async (req, res) => {
+  const lobbies = await Lobby.find();
+  res.json(lobbies);
+});
+
 app.get("/check-user", async (req, res) => {
   const users = await User.find();
   res.json(users);
