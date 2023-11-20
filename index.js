@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const User = require("./models/User");
 const Score = require("./models/Score");
+const Lobby = require("./models/Lobby");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -29,6 +30,22 @@ app.post("/signup", async (req, res) => {
       password: bcrypt.hashSync(password, salt),
     });
     res.json(userDoc);
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json({ err: "Error going on here" });
+  }
+});
+
+app.post("/create-lobby", async (req, res) => {
+  const { username: creator, lobbyName, password } = req.body;
+  try {
+    const lobbyDoc = await Lobby.create({
+      creator,
+      lobbyName,
+      players: [creator],
+      password,
+    });
+    res.json(lobbyDoc);
   } catch (e) {
     console.log(e);
     return res.status(400).json({ err: "Error going on here" });
