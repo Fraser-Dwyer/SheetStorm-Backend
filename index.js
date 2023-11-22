@@ -155,4 +155,22 @@ app.post("/post-score", async (req, res) => {
   }
 });
 
+app.post("/join-lobby", async (req, res) => {
+  const { username, lobbyName, lobbyPassword } = req.body;
+  const query = {
+    lobbyName: lobbyName,
+    password: lobbyPassword,
+  };
+
+  var updateDoc = { $addToSet: { players: username } };
+
+  try {
+    const lobbyDoc = await Lobby.updateOne(query, updateDoc);
+    res.json(lobbyDoc);
+  } catch (e) {
+    console.log(e);
+    res.status(400).json(e);
+  }
+});
+
 app.listen(4000);
