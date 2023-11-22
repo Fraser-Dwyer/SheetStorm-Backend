@@ -86,17 +86,19 @@ app.get("/check-user", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   const userDoc = await User.findOne({ username });
-  const passwordOk = bcrypt.compareSync(password, userDoc.password);
-  if (passwordOk) {
-    // User is logged in
-    jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
-      if (err) throw err;
-      res.cookie("token", token).json({
-        name: userDoc.name,
-        id: userDoc._id,
-        username: userDoc.username,
+  if (userDoc) {
+    const passwordOk = bcrypt.compareSync(password, userDoc.password);
+    if (passwordOk) {
+      // User is logged in
+      jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
+        if (err) throw err;
+        res.cookie("token", token).json({
+          name: userDoc.name,
+          id: userDoc._id,
+          username: userDoc.username,
+        });
       });
-    });
+    }
   } else {
     res.status(400).json("Invalid login");
   }
