@@ -176,4 +176,19 @@ app.post("/join-lobby", async (req, res) => {
   }
 });
 
+app.post("/delete-lobby", async (req, res) => {
+  const { lobbyName } = req.body;
+
+  try {
+    const lobbyDoc = await Lobby.findOneAndDelete({ lobbyName: lobbyName });
+    if (lobbyDoc === null) {
+      return res.status(404).json("Not found");
+    }
+    res.json(lobbyDoc);
+  } catch (e) {
+    console.log(e);
+    res.status(400).json(e);
+  }
+});
+
 app.listen(4000);
