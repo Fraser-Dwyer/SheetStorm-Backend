@@ -165,7 +165,10 @@ app.post("/join-lobby", async (req, res) => {
   var updateDoc = { $addToSet: { players: username } };
 
   try {
-    const lobbyDoc = await Lobby.updateOne(query, updateDoc);
+    const lobbyDoc = await Lobby.findOneAndUpdate(query, updateDoc);
+    if (lobbyDoc === null) {
+      return res.status(404).json("Not found");
+    }
     res.json(lobbyDoc);
   } catch (e) {
     console.log(e);
