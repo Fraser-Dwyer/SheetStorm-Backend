@@ -191,4 +191,21 @@ app.post("/delete-lobby", async (req, res) => {
   }
 });
 
+app.post("/leave-lobby", async (req, res) => {
+  const { lobbyName, username } = req.body;
+  try {
+    const lobbyDoc = await Lobby.findOneAndUpdate(
+      { lobbyName: lobbyName },
+      { $pull: { players: username } }
+    );
+    if (lobbyDoc === null) {
+      return res.status(404).json("Not found");
+    }
+    res.json(lobbyDoc);
+  } catch (e) {
+    console.log(e);
+    res.status(400).json(e);
+  }
+});
+
 app.listen(4000);
