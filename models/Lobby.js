@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 const LobbySchema = new Schema({
   creator: { type: String, required: true },
   lobbyName: { type: String, required: true, unique: true },
-  players: { type: [String], required: true },
+  players: { type: Array, default: [] },
   password: { type: String, required: true },
 });
 

@@ -42,7 +42,7 @@ app.post("/create-lobby", async (req, res) => {
     const lobbyDoc = await Lobby.create({
       creator,
       lobbyName,
-      players: [creator],
+      players: { username: creator, wins: 0 },
       password,
     });
     res.json(lobbyDoc);
@@ -162,7 +162,7 @@ app.post("/join-lobby", async (req, res) => {
     password: lobbyPassword,
   };
 
-  var updateDoc = { $addToSet: { players: username } };
+  var updateDoc = { $addToSet: { players: { username: username, wins: 0 } } };
 
   try {
     const lobbyDoc = await Lobby.findOneAndUpdate(query, updateDoc);
