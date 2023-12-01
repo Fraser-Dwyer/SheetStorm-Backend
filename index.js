@@ -1,25 +1,29 @@
-const express = require("express");
+require("dotenv").config();
 const cors = require("cors");
-const mongoose = require("mongoose");
+const express = require("express");
+const connectDB = require("./db");
 const User = require("./models/User");
 const Score = require("./models/Score");
 const Lobby = require("./models/Lobby");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-
 const salt = bcrypt.genSaltSync(10);
 const secret = "sdkjfbn239rdskb2398ds";
 
 const app = express();
+const PORT = 8000;
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+connectDB();
+app.use(cors({ credentials: true, origin: "https://sheetstorm.co.uk" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(
-  "mongodb+srv://testUser:testUser123@cluster0.ksotpfo.mongodb.net/?retryWrites=true&w=majority"
-);
+// Routes
+app.get("/", async (req, res) => {
+  res.json("Hello Mate!");
+});
 
 app.post("/signup", async (req, res) => {
   const { name, username, password } = req.body;
@@ -208,4 +212,6 @@ app.post("/leave-lobby", async (req, res) => {
   }
 });
 
-app.listen(4000);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
