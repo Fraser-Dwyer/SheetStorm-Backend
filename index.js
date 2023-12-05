@@ -15,7 +15,7 @@ const app = express();
 const PORT = 8000;
 
 connectDB();
-app.use(cors({ credentials: true, origin: "https://sheetstorm.co.uk" }));
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -59,17 +59,14 @@ app.post("/create-lobby", async (req, res) => {
 app.post("/make-scores", async (req, res) => {
   const { username, weekStart } = req.body;
   try {
-    const scoreDoc = await Score.create({
-      username,
-      weekStart,
-      Mon: "-",
-      Tue: "-",
-      Wed: "-",
-      Thu: "-",
-      Fri: "-",
-      Sat: "-",
-      Sun: "-",
-    });
+    const scoreDoc = await Score.findOneAndUpdate(
+      { username: username },
+      {
+        username,
+        weekStart,
+      },
+      { upsert: true }
+    );
     res.json(scoreDoc);
   } catch (e) {
     console.log(e);
@@ -200,7 +197,7 @@ app.post("/leave-lobby", async (req, res) => {
   try {
     const lobbyDoc = await Lobby.findOneAndUpdate(
       { lobbyName: lobbyName },
-      { $pull: { players: username } }
+      { $pull: { players: { username: username } } }
     );
     if (lobbyDoc === null) {
       return res.status(404).json("Not found");
