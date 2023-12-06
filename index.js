@@ -15,7 +15,7 @@ const app = express();
 const PORT = 8000;
 
 connectDB();
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: "https://sheetstorm.co.uk" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
