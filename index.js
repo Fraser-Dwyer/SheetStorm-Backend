@@ -12,10 +12,10 @@ const salt = bcrypt.genSaltSync(10);
 const secret = "sdkjfbn239rdskb2398ds";
 
 const app = express();
-const PORT = 8000;
+const PORT = 4000;
 
 connectDB();
-app.use(cors({ credentials: true, origin: "https://sheetstorm.co.uk" }));
+app.use(cors({ credentials: true, origin: "http://localhost:3000" })); //https://sheetstorm.co.uk
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -53,24 +53,6 @@ app.post("/create-lobby", async (req, res) => {
   } catch (e) {
     console.log(e);
     return res.status(400).json({ err: "Error going on here" });
-  }
-});
-
-app.post("/make-scores", async (req, res) => {
-  const { username, weekStart } = req.body;
-  try {
-    const scoreDoc = await Score.findOneAndUpdate(
-      { username: username },
-      {
-        username,
-        weekStart,
-      },
-      { upsert: true }
-    );
-    res.json(scoreDoc);
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json();
   }
 });
 
