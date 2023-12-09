@@ -12,10 +12,15 @@ const salt = bcrypt.genSaltSync(10);
 const secret = "sdkjfbn239rdskb2398ds";
 
 const app = express();
-const PORT = 4000;
+
+// Production: 8000
+// Development: 8000
+const PORT = 8000;
 
 connectDB();
-app.use(cors({ credentials: true, origin: "http://localhost:3000" })); //https://sheetstorm.co.uk
+// Production:  "https://sheetstorm.co.uk"
+// Development: "http://localhost:3000"
+app.use(cors({ credentials: true, origin: "https://sheetstorm.co.uk" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
