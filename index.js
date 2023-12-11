@@ -86,6 +86,8 @@ app.post("/login", async (req, res) => {
           username: userDoc.username,
         });
       });
+    } else {
+      res.status(400).json("Invalid login");
     }
   } else {
     res.status(400).json("Invalid login");
